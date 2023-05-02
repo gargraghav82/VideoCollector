@@ -20,10 +20,6 @@ app.use(
 );
 app.use(cookieParser());
 
-app.get("/", (req, res) => {
-  res.send(`<h1>Working Fine</h1>`);
-});
-
 app.use(
   cors({
     origin: process.env.FRONTEND_URL,
