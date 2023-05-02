@@ -32,6 +32,10 @@ app.use(
   })
 );
 
+app.get("/", (req, res) => {
+  res.send(`<h1>Working Fine</h1>`);
+});
+
 app.use("/api/v1", course);
 app.use("/api/v1/", user);
 app.use("/api/v1/", payment);
