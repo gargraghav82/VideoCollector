@@ -61,7 +61,7 @@ export const logout = catchAsyncError(async (req, res, next) => {
     .status(200)
     .clearCookie("token", {
       expires: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000),
-      sameSite: true,
+      sameSite: "None",
       httpOnly: true,
       secure: true,
     })
