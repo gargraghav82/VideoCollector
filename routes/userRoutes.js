@@ -32,8 +32,8 @@ router.route("/updateProfile").put(isAuthenticated, updateProfile);
 router
   .route("/updateProfilePic")
   .put(isAuthenticated, singleUpload, updateProfilePic);
-router.route("/forgotPassword").post(isAuthenticated, forgotPassword);
-router.route("/resetPassword/:token").put(isAuthenticated, resetPassword);
+router.route("/forgotPassword").post(forgotPassword);
+router.route("/resetPassword/:token").put(resetPassword);
 router.route("/addToPlaylist").post(isAuthenticated, addToPlaylist);
 router.route("/removeFromPlaylist").delete(isAuthenticated, removeFromPlaylist);
 
