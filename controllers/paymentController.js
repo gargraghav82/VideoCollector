@@ -26,13 +26,19 @@ export const buySubscription = catchAsyncError(async (req, res, next) => {
 
   res.status(201).json({
     success: true,
-    subscription,
+    subscription: subscription.id,
   });
 });
 
 export const paymentVerfication = catchAsyncError(async (req, res, next) => {
   const { razorpay_signature, razorpay_payment_id, razorpay_subscription_id } =
     req.body;
+
+  console.log(
+    razorpay_signature,
+    razorpay_payment_id,
+    razorpay_subscription_id
+  );
 
   const user = await User.findById(req.user._id);
 
