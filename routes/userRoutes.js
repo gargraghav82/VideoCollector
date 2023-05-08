@@ -6,6 +6,8 @@ import {
   changeRole,
   deleteMyProfile,
   deleteUser,
+  emailTokenConfoirm,
+  emailVerification,
   forgotPassword,
   getAllUsers,
   getMyProfile,
@@ -36,6 +38,8 @@ router.route("/forgotPassword").post(forgotPassword);
 router.route("/resetPassword/:token").put(resetPassword);
 router.route("/addToPlaylist").post(isAuthenticated, addToPlaylist);
 router.route("/removeFromPlaylist").delete(isAuthenticated, removeFromPlaylist);
+router.route("/verifyEmail").put(isAuthenticated, emailVerification);
+router.route("/emailVerify/:token").put(isAuthenticated, emailTokenConfoirm);
 
 router.route("/admin/users").get(isAuthenticated, isAdmin, getAllUsers);
 router

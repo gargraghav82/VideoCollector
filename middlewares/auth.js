@@ -35,3 +35,11 @@ export const isSubscribed = (req, res, next) => {
 
   next();
 };
+
+export const emailVerfication = (req, res, next) => {
+  if (req.user.isEmailVerified === false) {
+    return next(new ErrorHandler("Please Verify Your Email First", 401));
+
+    next();
+  }
+};

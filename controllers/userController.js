@@ -302,6 +302,58 @@ export const deleteMyProfile = catchAsyncError(async (req, res, next) => {
     });
 });
 
+export const emailVerification = catchAsyncError(async (req, res, next) => {
+  const user = await User.findById(req.user._id);
+
+  if (!user) return next(new ErrorHandler("User not found", 404));
+
+  const token = await user.getEmailToken();
+  await user.save();
+
+  const url = `${process.env.FRONTEND_URL}/emailVerify/${token}`;
+
+  const message = `Click on  link to verify Email ${url} , If You haven't requested please ignore`;
+
+  await sendEmail(user.email, "Email Verification Link", message);
+
+  res.status(200).json({
+    success: true,
+    message: `Email Verification Token has been sent succesfully to ${user.email}`,
+  });
+
+  res.status(200).json({
+    success: true,
+    message: "Email Token sent Successfully",
+  });
+});
+
+export const emailTokenConfoirm = catchAsyncError(async (req, res, next) => {
+  const { token } = req.params;
+
+  const emailVerifyToken = crypto
+    .createHash("sha256")
+    .update(token)
+    .digest("hex");
+  const user = await User.findOne({
+    emailVerifyToken,
+    emailVerifyExpire: {
+      $gt: Date.now(),
+    },
+  });
+
+  if (!user) return next(new ErrorHandler("Invalid Token or Expired", 401));
+
+  user.emailVerifyToken = undefined;
+  user.emailVerifyExpire = undefined;
+  user.isEmailVerified = true;
+  await user.save();
+
+  res.status(200).json({
+    success: true,
+    message: "Email Verifed succesfully",
+  });
+});
+
 User.watch().on("change", async () => {
   const stats = await Stats.find({}).sort({ createdAt: "desc" }).limit(1);
   const subscription = await User.find({

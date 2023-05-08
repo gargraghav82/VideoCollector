@@ -5,7 +5,7 @@ import {
   paymentVerfication,
 } from "../controllers/paymentController.js";
 import express from "express";
-import { isAuthenticated } from "../middlewares/auth.js";
+import { emailVerfication, isAuthenticated } from "../middlewares/auth.js";
 
 const router = express.Router();
 
