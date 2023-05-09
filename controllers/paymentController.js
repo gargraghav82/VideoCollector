@@ -95,6 +95,7 @@ export const cancelSubscription = catchAsyncError(async (req, res, next) => {
   user.subscription.status = undefined;
 
   await user.save();
+  console.log(user);
 
   res.status(200).json({
     success: true,
