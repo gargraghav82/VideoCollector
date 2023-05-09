@@ -34,12 +34,6 @@ export const paymentVerfication = catchAsyncError(async (req, res, next) => {
   const { razorpay_signature, razorpay_payment_id, razorpay_subscription_id } =
     req.body;
 
-  console.log(
-    razorpay_signature,
-    razorpay_payment_id,
-    razorpay_subscription_id
-  );
-
   const user = await User.findById(req.user._id);
 
   const subscription_id = user.subscription.id;
@@ -89,12 +83,14 @@ export const cancelSubscription = catchAsyncError(async (req, res, next) => {
 
   const gap = Date.now() - payment.createdAt;
 
-  if (gap < process.env.REFUND_DAYS) {
+  if (gap < process.env.REFUND_DAYS * 1000 * 60 * 60 * 24) {
     await instance.payments.refund(payment.razorpay_payment_id);
     refund = true;
   }
+  await Payment.findOneAndDelete({
+    razorpay_subscription_id: subscription_id,
+  });
 
-  await payment.remove();
   user.subscription_id = undefined;
   user.subscription.status = undefined;
 
